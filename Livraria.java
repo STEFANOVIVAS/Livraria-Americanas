@@ -8,8 +8,10 @@
 // ao realizar esta operação os produtos comprados são removidos do estoque e o dinheiro pago deve ser adicionado ao caixa
 
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -99,8 +101,8 @@ public class Livraria {
         switch (numeroMenuGerenciadorEstoque) {
             case ("1") -> acessarMenuAdicionarProduto(sc);
             case ("2") -> consultarProduto(sc);
-           /* case ("3") -> consultarEstoqueGeral();
-            case ("4") -> consultaEstoquePorCategoria();*/
+            case ("3") -> acessarMenuAlterarProduto(sc);
+           /* case ("4") -> removerProduto();*/
             case ("5") -> menuInciar(sc);
             default ->throw new IllegalStateException("Erro inesperado" + numeroMenuGerenciadorEstoque);
 
@@ -109,6 +111,8 @@ public class Livraria {
         }
 
     }
+
+
 
 
     public void acessarMenuAdicionarProduto(Scanner sc){
@@ -273,6 +277,250 @@ public class Livraria {
         String opcaoMenu=sc.next();
         if(opcaoMenu.equals("1")){
             consultarProduto(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
+
+
+    }
+
+    private void acessarMenuAlterarProduto(Scanner sc) {
+
+        System.out.println("*****************         Alterar Produto         ***************************");
+        System.out.println("*****************************************************************************");
+        System.out.println("****   Digite o número 1 para Alterar um produto do tipo Album de música. ***");
+        System.out.println("****   Digite o número 2 para Alterar um produto do tipo Brinquedo.     *****");
+        System.out.println("****   Digite o número 3 para Alterar um produto do tipo Filme.         *****");
+        System.out.println("****   Digite o número 4 para Alterar um produto do tipo Jogo.          *****");
+        System.out.println("****   Digite o número 5 para Alterar um produto do tipo Livro.         *****");
+        System.out.println("****   Digite o número 6 para Retornar ao gerenciador de Estoque. ***********");
+        System.out.println("*****************************************************************************");
+
+        String numeroMenuAlterarProduto = sc.next();
+        switch (numeroMenuAlterarProduto) {
+            case ("1") -> alterarAlbum(sc);
+            case ("2") -> alterarBrinquedo(sc);
+            case ("3") -> alterarFilme(sc);
+            case ("4") -> alterarJogo(sc);
+            case ("5") -> alterarLivro(sc);
+            case ("6") -> acessarMenuGerenciadorEstoque(sc);
+            default ->throw new IllegalStateException("Erro inesperado" + numeroMenuAlterarProduto);
+
+
+
+        }
+    }
+
+    private void alterarLivro(Scanner sc) {
+        produtos.stream().filter(produto->produto.getTipo().equals("Livro")).forEach(System.out::println);
+        System.out.println();
+        System.out.println("Digite o id do produto a ser alterado:");
+        String idAlteraProduto=sc.next();
+        int id=Integer.parseInt(idAlteraProduto);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id && produto.getTipo().equals("Livro"))){
+            Livro livro=(Livro) produtos.stream().filter(produto->produto.getId()==id);
+            System.out.println("Digite o nome do Livro:");
+            String nome=sc.next();
+            livro.setNome(nome);
+
+            System.out.println("Digite o preco do Livro:");
+            String precoString=sc.next();
+            Double preco=Double.valueOf(precoString);
+            livro.setPreco(preco);
+
+            System.out.println("Digite o nome do escritor:");
+            String escritor=sc.next();
+            livro.setEscritor(escritor);
+
+            System.out.println("Digite o nome do genero:");
+            String genero=sc.next();
+            livro.addGeneros(genero);
+
+            System.out.println("Digite o nome da editora:");
+            String editora=sc.next();
+            livro.setEditora(editora);
+
+            System.out.println("Produto alterado com sucesso!");
+            System.out.println(livro);
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            alterarBrinquedo(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
+    }
+
+    private void alterarJogo(Scanner sc) {
+        produtos.stream().filter(produto->produto.getTipo().equals("Jogo")).forEach(System.out::println);
+        System.out.println();
+        System.out.println("Digite o id do produto a ser alterado:");
+        String idAlteraProduto=sc.next();
+        int id=Integer.parseInt(idAlteraProduto);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id && produto.getTipo().equals("Jogo"))){
+            Jogo jogo=(Jogo) produtos.stream().filter(produto->produto.getId()==id);
+            System.out.println("Digite o nome do Jogo:");
+            String nome=sc.next();
+            jogo.setNome(nome);
+
+            System.out.println("Digite o preco do Jogo:");
+            String precoString=sc.next();
+            Double preco=Double.valueOf(precoString);
+            jogo.setPreco(preco);
+
+            System.out.println("Digite o nome do Estudio:");
+            String estudio=sc.next();
+            jogo.setEstudio(estudio);
+
+            System.out.println("Digite o nome do genero:");
+            String genero=sc.next();
+            jogo.addGeneros(genero);
+
+            System.out.println("Digite o nome da distribuidora:");
+            String distribuidora=sc.next();
+            jogo.setDistribuidora(distribuidora);
+
+            System.out.println("Produto alterado com sucesso!");
+            System.out.println(jogo);
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            alterarJogo(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
+    }
+
+    private void alterarFilme(Scanner sc) {
+        produtos.stream().filter(produto->produto.getTipo().equals("Filme")).forEach(System.out::println);
+        System.out.println();
+        System.out.println("Digite o id do produto a ser alterado:");
+        String idAlteraProduto=sc.next();
+        int id=Integer.parseInt(idAlteraProduto);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id&&produto.getTipo().equals("Filme"))){
+            Filme filme=(Filme) produtos.stream().filter(produto->produto.getId()==id);
+            System.out.println("Digite o nome do Filme:");
+            String nome=sc.next();
+            filme.setNome(nome);
+
+            System.out.println("Digite o preco do Filme:");
+            String precoString=sc.next();
+            Double preco=Double.valueOf(precoString);
+            filme.setPreco(preco);
+
+            System.out.println("Digite o nome do genero:");
+            String genero=sc.next();
+            filme.addGeneros(genero);
+
+            System.out.println("Digite o nome do Produtor:");
+            String produtor=sc.next();
+            filme.addProdutores(produtor);
+
+            System.out.println("Digite o nome do Selo:");
+            String diretor=sc.next();
+            filme.addDiretores(diretor);
+
+            System.out.println("Produto alterado com sucesso!");
+            System.out.println(filme);
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            alterarFilme(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
+    }
+
+    private void alterarBrinquedo(Scanner sc) {
+        produtos.stream().filter(produto->produto.getTipo().equals("Brinquedo")).forEach(System.out::println);
+        System.out.println();
+        System.out.println("Digite o id do produto a ser alterado:");
+        String idAlteraProduto=sc.next();
+        int id=Integer.parseInt(idAlteraProduto);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id&& produto.getTipo().equals("Brinquedo"))){
+            Brinquedo brinquedo=(Brinquedo) produtos.stream().filter(produto->produto.getId()==id);
+            System.out.println("Digite o nome do Brinquedo:");
+            String nome=sc.next();
+            brinquedo.setNome(nome);
+
+            System.out.println("Digite o preco do Brinquedo:");
+            String precoString=sc.next();
+            Double preco=Double.valueOf(precoString);
+            brinquedo.setPreco(preco);
+
+            System.out.println("Digite o Tipo do Brinquedo:");
+            String tipoBrinquedo=sc.next();
+            brinquedo.setTipoBrinquedo(tipoBrinquedo);
+
+
+            System.out.println("Produto alterado com sucesso!");
+            System.out.println(brinquedo);
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            alterarBrinquedo(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
+
+    }
+
+    private void alterarAlbum(Scanner sc) {
+
+        produtos.stream().filter(produto->produto.getTipo().equals("Albúm")).forEach(System.out::println);
+        System.out.println();
+        System.out.println("Digite o id do produto a ser alterado:");
+        String idAlteraProduto=sc.next();
+        int id=Integer.parseInt(idAlteraProduto);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id)){
+            AlbumMusica album=(AlbumMusica) produtos.stream().filter(produto->produto.getId()==id&& produto.getTipo().equals("Albúm")).map(AlbumMusica.class::isInstance);
+            System.out.println("Digite o nome do Albúm:");
+            String nome=sc.next();
+            album.setNome(nome);
+
+            System.out.println("Digite o preco do Albúm:");
+            String precoString=sc.next();
+            Double preco=Double.valueOf(precoString);
+            album.setPreco(preco);
+
+            System.out.println("Digite o nome do genero:");
+            String genero=sc.next();
+            album.addGeneros(genero);
+
+            System.out.println("Digite o nome da Banda:");
+            String banda=sc.next();
+            album.addMusicos(banda);
+
+            System.out.println("Digite o nome do Selo:");
+            String selo=sc.next();
+            album.addSelos(selo);
+
+            System.out.println("Produto alterado com sucesso!");
+            System.out.println(album);
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            alterarAlbum(sc);
 
         }else{
             acessarMenuGerenciadorEstoque(sc);
