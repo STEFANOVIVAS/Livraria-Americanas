@@ -4,7 +4,7 @@ public class Produto {
     private static int nextId=1;
     private String nome;
     private Double preco;
-    private String tipo;
+    private Categoria tipo;
 
     public Produto(String nome, Double preco) {
         id=nextId;
@@ -40,11 +40,11 @@ public class Produto {
         this.preco = preco;
     }
 
-    public String getTipo() {
+    public Categoria getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(Categoria tipo) {
         this.tipo = tipo;
     }
 

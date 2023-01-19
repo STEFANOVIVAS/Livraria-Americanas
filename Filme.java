@@ -6,11 +6,11 @@ public class Filme extends Produto{
     private List<String> generos=new ArrayList<>();
     private String estudio;
     private List<String> produtores= new ArrayList<>();
-    private String tipo;
+    private Categoria tipo;
 
     public Filme(String nome, Double preco, String diretor, String genero, String estudio, String produtor) {
         super(nome, preco);
-        this.setTipo("Filme");
+        this.setTipo(Categoria.FILME);
         this.addDiretores(diretor);
         this.addGeneros(genero);
         this.estudio = estudio;
@@ -54,12 +54,12 @@ public class Filme extends Produto{
     }
 
     @Override
-    public String getTipo() {
+    public Categoria getTipo() {
         return tipo;
     }
 
     @Override
-    public void setTipo(String tipo) {
+    public void setTipo(Categoria tipo) {
         this.tipo = tipo;
     }
 

@@ -1,21 +1,21 @@
 public class Brinquedo extends Produto{
     private String tipoBrinquedo;
-    private String tipo;
+    private Categoria tipo;
 
     public Brinquedo(String nome, Double preco, String tipoBrinquedo) {
         super(nome, preco);
-        this.setTipo("Brinquedo");
+        this.setTipo(Categoria.BRINQUEDO);
         this.tipoBrinquedo = tipoBrinquedo;
     }
 
 
     @Override
-    public String getTipo() {
+    public Categoria getTipo() {
         return tipo;
     }
 
     @Override
-    public void setTipo(String tipo) {
+    public void setTipo(Categoria tipo) {
         this.tipo = tipo;
     }
 
