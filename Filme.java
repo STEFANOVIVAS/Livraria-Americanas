@@ -6,13 +6,14 @@ public class Filme extends Produto{
     private List<String> generos=new ArrayList<>();
     private String estudio;
     private List<String> produtores= new ArrayList<>();
+    private static final String tipo="Filme";
 
-    public Filme(Long id, String nome, Double preco, List<String> diretores, List<String> generos, String estudio, List<String> produtores) {
-        super(id, nome, preco);
-        this.diretores = diretores;
-        this.generos = generos;
+    public Filme(String nome, Double preco, String diretor, String genero, String estudio, String produtor) {
+        super(nome, preco);
+        this.addDiretores(diretor);
+        this.addGeneros(genero);
         this.estudio = estudio;
-        this.produtores = produtores;
+        this.addProdutores(produtor);
     }
 
     public List<String> getDiretores() {
@@ -49,5 +50,20 @@ public class Filme extends Produto{
 
     public void addProdutores(String produtor) {
         this.produtores.add(produtor);
+    }
+
+    public String getTipo(){
+        return tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "Filme{" +
+                super.toString() +
+                " tipo=" + tipo +
+                ", diretores=" + diretores +
+                ", generos=" + generos +
+                ", estudio='" + estudio + '\'' +
+                ", produtores=" + produtores + "}" ;
     }
 }

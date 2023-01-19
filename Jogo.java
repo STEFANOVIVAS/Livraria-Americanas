@@ -5,11 +5,12 @@ public class Jogo extends Produto{
     private String distribuidora;
     private List<String> generos=new ArrayList<>();
     private String estudio;
+    private static final String tipo="Jogo";
 
-    public Jogo(Long id, String nome, Double preco, String distribuidora, List<String> generos, String estudio) {
-        super(id, nome, preco);
+    public Jogo(String nome, Double preco, String distribuidora, String genero, String estudio) {
+        super(nome, preco);
         this.distribuidora = distribuidora;
-        this.generos = generos;
+        this.addGeneros(genero);
         this.estudio = estudio;
     }
 
@@ -38,5 +39,20 @@ public class Jogo extends Produto{
 
     public void setEstudio(String estudio) {
         this.estudio = estudio;
+    }
+
+    public String getTipo(){
+        return tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "Jogo{" +
+                super.toString() +
+                ", tipo='" + tipo + '\'' +
+                ", distribuidora='" + distribuidora + '\'' +
+                ", generos=" + generos +
+                ", estudio='" + estudio + '\'' +
+                "} ";
     }
 }

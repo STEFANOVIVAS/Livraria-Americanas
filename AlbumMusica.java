@@ -6,12 +6,13 @@ public class AlbumMusica extends Produto{
     private List<String> generos=new ArrayList<>();
     private List<String> musicos=new ArrayList<>();
     private List<String> selos= new ArrayList<>();
+    private static final String tipo="Albúm";
 
-    public AlbumMusica(Long id, String nome,Double preco,List<String> generos, List<String> musicos, List<String> selos ) {
-        super(id,nome,preco);
-        this.generos = generos;
-        this.musicos = musicos;
-        this.selos = selos;
+    public AlbumMusica(String nome,Double preco, String genero, String musico, String selo ) {
+        super(nome,preco);
+        this.addGeneros(genero);
+        this.addMusicos(musico);
+        this.addSelos(selo);
 
     }
 
@@ -42,5 +43,20 @@ public class AlbumMusica extends Produto{
 
     public void addSelos(String selo) {
         this.selos.add(selo);
+    }
+
+    public String getTipo(){
+        return tipo;
+    }
+
+    @Override
+    public String toString() {
+        return "AlbumMusica{" +
+                super.toString() +
+                ", tipo=" + tipo +
+                ", generos=" + generos +
+                ", musicos=" + musicos +
+                ", selos=" + selos +
+                '}';
     }
 }

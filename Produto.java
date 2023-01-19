@@ -1,20 +1,24 @@
 public abstract class Produto {
 
-    private Long id;
+    private int id=0;
+    private static int nextId=1;
     private String nome;
     private Double preco;
 
-    public Produto(Long id, String nome, Double preco) {
-        this.id = id;
+    public Produto(String nome, Double preco) {
+        id=nextId;
+        nextId++;
         this.nome = nome;
         this.preco = preco;
+
     }
 
-    public Long getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -32,5 +36,14 @@ public abstract class Produto {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", preco=" + preco +
+                '}';
     }
 }
