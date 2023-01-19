@@ -1,4 +1,4 @@
-public abstract class Produto {
+public class Produto {
 
     private int id=0;
     private static int nextId=1;

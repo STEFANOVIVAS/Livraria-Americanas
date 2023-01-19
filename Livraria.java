@@ -8,7 +8,7 @@
 // ao realizar esta operação os produtos comprados são removidos do estoque e o dinheiro pago deve ser adicionado ao caixa
 
 
-import java.sql.SQLOutput;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -102,9 +102,9 @@ public class Livraria {
             case ("1") -> acessarMenuAdicionarProduto(sc);
             case ("2") -> consultarProduto(sc);
             case ("3") -> acessarMenuAlterarProduto(sc);
-           /* case ("4") -> removerProduto();*/
+            case ("4") -> removerProduto(sc);
             case ("5") -> menuInciar(sc);
-            default ->throw new IllegalStateException("Erro inesperado" + numeroMenuGerenciadorEstoque);
+            default -> acessarMenuGerenciadorEstoque(sc);
 
 
 
@@ -112,8 +112,34 @@ public class Livraria {
 
     }
 
+    private void removerProduto(Scanner sc) {
+        System.out.println("Esta é a lista de produtos em estoque, favor digite o número do Id para ver um produto específico:");
+        if (produtos.isEmpty()){
+            System.out.println("A lista de produtos esta vazia!");
+            acessarMenuGerenciadorEstoque(sc);
 
+        }
+        produtos.forEach(System.out::println);
+        System.out.println("Digite o número do id do produto que deseja Excluir");
+        String produtoId=sc.next();
+        int id=Integer.parseInt(produtoId);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id)){
+            Produto matchProduct = (Produto) produtos.stream().filter(produto->produto.getId()==id);
+            produtos.remove(matchProduct);
+            System.out.println("Produto removido com sucesso!");
+            acessarMenuGerenciadorEstoque(sc);
 
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            consultarProduto(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
+
+    }
 
     public void acessarMenuAdicionarProduto(Scanner sc){
         System.out.println("*************         Adicionar Produto         ***********************");
@@ -133,7 +159,7 @@ public class Livraria {
             case ("4") -> adicionarJogo(sc);
             case ("5") -> adicionarLivro(sc);
             case ("6") -> acessarMenuGerenciadorEstoque(sc);
-            default ->throw new IllegalStateException("Erro inesperado" + numeroMenuAdicionarProduto);
+            default -> acessarMenuAdicionarProduto(sc);
 
 
 
@@ -305,13 +331,12 @@ public class Livraria {
             case ("4") -> alterarJogo(sc);
             case ("5") -> alterarLivro(sc);
             case ("6") -> acessarMenuGerenciadorEstoque(sc);
-            default ->throw new IllegalStateException("Erro inesperado" + numeroMenuAlterarProduto);
+            default -> acessarMenuAlterarProduto(sc);
 
 
 
         }
     }
-
     private void alterarLivro(Scanner sc) {
         produtos.stream().filter(produto->produto.getTipo().equals("Livro")).forEach(System.out::println);
         System.out.println();
@@ -355,7 +380,6 @@ public class Livraria {
             acessarMenuGerenciadorEstoque(sc);
         }
     }
-
     private void alterarJogo(Scanner sc) {
         produtos.stream().filter(produto->produto.getTipo().equals("Jogo")).forEach(System.out::println);
         System.out.println();
@@ -399,7 +423,6 @@ public class Livraria {
             acessarMenuGerenciadorEstoque(sc);
         }
     }
-
     private void alterarFilme(Scanner sc) {
         produtos.stream().filter(produto->produto.getTipo().equals("Filme")).forEach(System.out::println);
         System.out.println();
@@ -443,7 +466,6 @@ public class Livraria {
             acessarMenuGerenciadorEstoque(sc);
         }
     }
-
     private void alterarBrinquedo(Scanner sc) {
         produtos.stream().filter(produto->produto.getTipo().equals("Brinquedo")).forEach(System.out::println);
         System.out.println();
@@ -481,7 +503,6 @@ public class Livraria {
         }
 
     }
-
     private void alterarAlbum(Scanner sc) {
 
         produtos.stream().filter(produto->produto.getTipo().equals("Albúm")).forEach(System.out::println);
