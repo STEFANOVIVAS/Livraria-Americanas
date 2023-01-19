@@ -11,12 +11,13 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Livraria {
     private List<Produto> produtos= new ArrayList<>();
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in).useDelimiter("\\n");
-        AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
+       /* AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
         AlbumMusica album2 = new AlbumMusica("revolta dos dandis", 40.5, "Rock", "Engenheiros do Hawai", "EMI");
         Livro livro = new Livro("Habitos Atomicos", 44.5, "Produtividade", "Carlos tiher", "Cia das letras");
         Brinquedo brinquedo = new Brinquedo("Pula Pula", 40.5, "Bonecos");
@@ -30,12 +31,20 @@ public class Livraria {
         System.out.println(brinquedo);
         System.out.println(jogo);
         System.out.println(filme);
+        List<Produto> prods=new ArrayList<>();
+        prods.add(album);
+        prods.add(livro);
+        prods.add(filme);
+        prods.add(livro);
+        int id=1;
+        prods.stream().filter((produto)->produto.getId()==id).forEach(System.out::println);*/
 
-        
 
 
-       /* Livraria livraria=new Livraria();
-        livraria.menuInciar(sc);*/
+
+
+        Livraria livraria=new Livraria();
+        livraria.menuInciar(sc);
 
     }
 
@@ -89,10 +98,10 @@ public class Livraria {
         String numeroMenuGerenciadorEstoque = sc.next();
         switch (numeroMenuGerenciadorEstoque) {
             case ("1") -> acessarMenuAdicionarProduto(sc);
-           /* case ("2") -> consultarEstoqueProduto();
-            case ("3") -> consultarEstoqueGeral();
-            case ("4") -> consultaEstoquePorCategoria();
-            case ("5") -> realizarCompra();*/
+            case ("2") -> consultarProduto(sc);
+           /* case ("3") -> consultarEstoqueGeral();
+            case ("4") -> consultaEstoquePorCategoria();*/
+            case ("5") -> menuInciar(sc);
             default ->throw new IllegalStateException("Erro inesperado" + numeroMenuGerenciadorEstoque);
 
 
@@ -100,6 +109,8 @@ public class Livraria {
         }
 
     }
+
+
     public void acessarMenuAdicionarProduto(Scanner sc){
         System.out.println("*************         Adicionar Produto         ***********************");
         System.out.println("***********************************************************************");
@@ -117,6 +128,7 @@ public class Livraria {
             case ("3") -> adicionarFilme(sc);
             case ("4") -> adicionarJogo(sc);
             case ("5") -> adicionarLivro(sc);
+            case ("6") -> acessarMenuGerenciadorEstoque(sc);
             default ->throw new IllegalStateException("Erro inesperado" + numeroMenuAdicionarProduto);
 
 
@@ -236,6 +248,35 @@ public class Livraria {
         produtos.add(livro);
         System.out.println(produtos);
         acessarMenuGerenciadorEstoque(sc);
+
+
+    }
+
+    private void consultarProduto(Scanner sc) {
+        System.out.println("Esta é a lista de produtos em estoque, favor digite o número do Id para ver um produto específico:");
+        if (produtos.isEmpty()){
+            System.out.println("A lista de produtos esta vazia!");
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        produtos.forEach(System.out::println);
+        System.out.println("Digite o número do id do produto desejado");
+        String produtoId=sc.next();
+        int id=Integer.parseInt(produtoId);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id)){
+            produtos.stream().filter(produto->produto.getId()==id).forEach(System.out::println);
+            acessarMenuGerenciadorEstoque(sc);
+
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            consultarProduto(sc);
+
+        }else{
+            acessarMenuGerenciadorEstoque(sc);
+        }
 
 
     }

@@ -6,15 +6,18 @@ public class AlbumMusica extends Produto{
     private List<String> generos=new ArrayList<>();
     private List<String> musicos=new ArrayList<>();
     private List<String> selos= new ArrayList<>();
-    private static final String tipo="Albúm";
+    private String tipo;
 
     public AlbumMusica(String nome,Double preco, String genero, String musico, String selo ) {
         super(nome,preco);
+        this.setTipo("Albúm");
         this.addGeneros(genero);
         this.addMusicos(musico);
         this.addSelos(selo);
 
+
     }
+
 
     public List<String> getGeneros() {
         return generos;
@@ -45,8 +48,14 @@ public class AlbumMusica extends Produto{
         this.selos.add(selo);
     }
 
-    public String getTipo(){
+    @Override
+    public String getTipo() {
         return tipo;
+    }
+
+    @Override
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override

@@ -4,12 +4,14 @@ public abstract class Produto {
     private static int nextId=1;
     private String nome;
     private Double preco;
+    private String tipo;
 
     public Produto(String nome, Double preco) {
         id=nextId;
         nextId++;
         this.nome = nome;
         this.preco = preco;
+
 
     }
 
@@ -36,6 +38,14 @@ public abstract class Produto {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override
