@@ -60,10 +60,9 @@ public class Livraria {
 
 
         System.out.println("****   Digite o número 1 para Acessar o gerenciador de estoque.   *****");
-        System.out.println("****   Digite o número 2 para Consultar o estoque de uma categoria. ***");
+        System.out.println("****   Digite o número 2 para Consultar o estoque por categoria. ***");
         System.out.println("****   Digite o número 3 para Consultar o estoque geral.          *****");
-        System.out.println("****   Digite o número 4 para Consultar o estoque por categoria.  *****");
-        System.out.println("****   Digite o número 5 para realizar uma compra.                *****");
+        System.out.println("****   Digite o número 4 para realizar uma compra.                *****");
         System.out.println("***********************************************************************");
 
 
@@ -72,9 +71,9 @@ public class Livraria {
         switch (numeroMenuInicial) {
             case ("1") -> acessarMenuGerenciadorEstoque(sc);
             case ("2") -> consultarEstoqueCategoria(sc);
-            /*case ("3") -> consultarEstoqueGeral();
-            case ("4") -> consultaEstoquePorCategoria();
-            case ("5") -> realizarCompra();*/
+            case ("3") -> consultarEstoqueGeral(sc);
+
+            /*case ("5") -> realizarCompra();*/
             default ->throw new IllegalStateException("Erro inesperado" + numeroMenuInicial);
 
 
@@ -83,6 +82,19 @@ public class Livraria {
 
 
 
+
+    }
+
+    private void consultarEstoqueGeral(Scanner sc) {
+        produtos.forEach(System.out::println);
+        System.out.println("Tecle 1 para consultar o estoque novamente ou tecle 2 para retornar ao menu inicial");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            consultarProduto(sc);
+
+        }else{
+            menuInciar(sc);
+        }
 
     }
 
@@ -102,7 +114,7 @@ public class Livraria {
             case ("2") -> listarProdutosCategoria(sc,Categoria.BRINQUEDO);
             case ("3") -> listarProdutosCategoria(sc,Categoria.FILME);
             case ("4") -> listarProdutosCategoria(sc,Categoria.JOGO);
-            case ("5") ->listarProdutosCategoria(sc,Categoria.LIVRO);
+            case ("5") -> listarProdutosCategoria(sc,Categoria.LIVRO);
             case ("6") -> menuInciar(sc);
             default -> consultarEstoqueCategoria(sc);
 
@@ -193,10 +205,7 @@ public class Livraria {
             case ("6") -> acessarMenuGerenciadorEstoque(sc);
             default -> acessarMenuAdicionarProduto(sc);
 
-
-
         }
-
 
     }
     public void adicionarAlbum(Scanner sc){
