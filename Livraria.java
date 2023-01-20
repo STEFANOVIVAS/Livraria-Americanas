@@ -22,43 +22,6 @@ public class Livraria {
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in).useDelimiter("\\n");
-       /* AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
-        AlbumMusica album2 = new AlbumMusica("revolta dos dandis", 40.5, "Rock", "Engenheiros do Hawai", "EMI");
-        Livro livro = new Livro("Habitos Atomicos", 44.5, "Produtividade", "Carlos tiher", "Cia das letras");
-        Brinquedo brinquedo = new Brinquedo("Pula Pula", 40.5, "Bonecos");
-
-        Jogo jogo = new Jogo("Jogos de verão",23.5,"EA Sports","Esportes","EA Sports");
-        Filme filme = new Filme("Revolta dos dandis", 424.5, "Cris Rock", "Ação", "Warner","tesxtor faith");
-
-        System.out.println(album);
-        System.out.println(album2);
-        System.out.println(livro);
-        System.out.println(brinquedo);
-        System.out.println(jogo);
-        System.out.println(filme);
-        List<Produto> prods=new ArrayList<>();
-        prods.add(album);
-        prods.add(livro);
-        prods.add(filme);
-
-        int id=1;
-        Optional<Produto> matchProduct =  prods.stream().filter((produto)->produto.getId()==id).findFirst();
-        if(matchProduct.isPresent()){
-            Produto produto=matchProduct.get();
-            System.out.println(produto);
-        }
-
-
-        List<Integer> numeros =new ArrayList<>();
-        numeros.add(1);
-        numeros.add(3);
-        List<Integer> compras=prods.stream().map(Produto::getId).toList();
-        System.out.println(compras);
-
-        List<Produto> results = prods.stream().filter(produto->numeros.stream().collect(Collectors.toList()).contains(produto.getId())).collect(Collectors.toList());
-        System.out.println(prods);
-        prods.removeIf(produto->numeros.stream().collect(Collectors.toList()).contains(produto.getId()));
-        System.out.println(prods);*/
 
         Livraria livraria=new Livraria();
         livraria.menuInciar(sc);
