@@ -22,7 +22,7 @@ public class Livraria {
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in).useDelimiter("\\n");
-        /*AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
+       /* AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
         AlbumMusica album2 = new AlbumMusica("revolta dos dandis", 40.5, "Rock", "Engenheiros do Hawai", "EMI");
         Livro livro = new Livro("Habitos Atomicos", 44.5, "Produtividade", "Carlos tiher", "Cia das letras");
         Brinquedo brinquedo = new Brinquedo("Pula Pula", 40.5, "Bonecos");
@@ -47,6 +47,8 @@ public class Livraria {
             Produto produto=matchProduct.get();
             System.out.println(produto);
         }
+
+
         List<Integer> numeros =new ArrayList<>();
         numeros.add(1);
         numeros.add(3);
@@ -56,8 +58,7 @@ public class Livraria {
         List<Produto> results = prods.stream().filter(produto->numeros.stream().collect(Collectors.toList()).contains(produto.getId())).collect(Collectors.toList());
         System.out.println(prods);
         prods.removeIf(produto->numeros.stream().collect(Collectors.toList()).contains(produto.getId()));
-        System.out.println(prods);
-*/
+        System.out.println(prods);*/
 
         Livraria livraria=new Livraria();
         livraria.menuInciar(sc);
@@ -75,7 +76,7 @@ public class Livraria {
 
 
         System.out.println("****   Digite o número 1 para Acessar o gerenciador de estoque.   *****");
-        System.out.println("****   Digite o número 2 para Consultar o estoque por categoria. ***");
+        System.out.println("****   Digite o número 2 para Consultar o estoque por categoria.  *****");
         System.out.println("****   Digite o número 3 para Consultar o estoque geral.          *****");
         System.out.println("****   Digite o número 4 para realizar uma compra.                *****");
         System.out.println("***********************************************************************");
@@ -90,45 +91,37 @@ public class Livraria {
             case ("4") -> acessarMenuCompra(sc);
             default -> menuInciar(sc);
 
-
-
         }
-
-
-
 
     }
 
     private void acessarMenuCompra(Scanner sc) {
-        //listar produtos(posso chamar função consultar estoque geral
-        // permitir que o usuário escolha os produtos para inserir no carrinho de compras
-        // calcular o valor da compra e mostrar os produtos
-        // remover produitos do estoque
-        // acrescentar valor ao caixa
-
+        System.out.println();
+        System.out.println("Essa é a lista atual de produtos em estoque: ");
 
         produtos.forEach(System.out::println);
+        System.out.println();
 
-
-        System.out.println("Sua lista atual tem "+ carrinho.size() + " itens");
+        System.out.println("Seu carrinho de compras atual tem "+ carrinho.size() + " itens");
+        System.out.println();
         System.out.println("Carrinho de compras: ");
         carrinho.forEach(System.out::println);
         double valorTotal= carrinho.stream().mapToDouble(Produto::getPreco).sum();
         System.out.println("Valor total da compra: " + valorTotal);
-        System.out.println("Digite 1 para adicionar os itens na sua sacola, 2 para remover, 3 para encerar a compra ou 4 voltar ao menu inicial.");
+        System.out.println();
+        System.out.println("Digite 1 para adicionar os itens na sua sacola, 2 para remover, 3 para finalizar a compra ou 4 retornar ao menu inicial.");
         String opcaoMenuCompra=sc.next();
         switch (opcaoMenuCompra) {
             case ("1") -> incluirProdutosCarrinho(sc);
             case ("2") -> removerProdutosCarrinho(sc);
-            /*case ("3") -> encerrarCompra();*/
+            case ("3") -> finalizarCompra(sc);
             default -> menuInciar(sc);
 
         }
 
-
     }
 
-    private void encerrarCompra(Scanner sc) {
+    private void finalizarCompra(Scanner sc) {
         //remover produtos do estoque
         if(carrinho.size()==0){
             System.out.println("Seu carrinho esta vazio, portanto, não será possível encerrar a compra");
@@ -139,7 +132,12 @@ public class Livraria {
         produtos.removeIf(produto->idCompras.stream().toList().contains(produto.getId()));
         double valorTotal= carrinho.stream().mapToDouble(Produto::getPreco).sum();
         this.caixa+=valorTotal;
-        System.out.println("Caixa total no valor de " + "R$ " + this.caixa);
+        System.out.println("Sua compra totalizou " + valorTotal);
+        System.out.println();
+        System.out.println("Lista dos itens adquiridos: ");
+        carrinho.forEach(System.out::println);
+        System.out.println("Agradecemos a preferência e volte sempre!");
+        System.out.println("Após a venda, o caixa total da Livraria é de " + "R$ " + this.caixa);
         carrinho.clear();
         menuInciar(sc);
 
@@ -157,7 +155,7 @@ public class Livraria {
         if (carrinho.stream().anyMatch(produto -> produto.getId()==id)){
             carrinho.removeIf(produto-> produto.getId()==id);
             System.out.println("Produto removido com sucesso!");
-            acessarMenuGerenciadorEstoque(sc);
+            acessarMenuCompra(sc);
 
         }
         System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de Compras");
@@ -174,8 +172,8 @@ public class Livraria {
         System.out.println("Escolha os items que irão compor seu carrinho de compras através do número do id");
         String idProduto=sc.next();
         int id= Integer.parseInt(idProduto);
-        if (carrinho.stream().anyMatch(produto -> produto.getId()==id)){
-            Optional<Produto> matchProduct = carrinho.stream().filter(produto->produto.getId()==id).findFirst();
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id)){
+            Optional<Produto> matchProduct = produtos.stream().filter(produto->produto.getId()==id).findFirst();
             if (matchProduct.isPresent()){
                 Produto produto=matchProduct.get();
                 carrinho.add(produto);
@@ -228,13 +226,14 @@ public class Livraria {
     private void listarProdutosCategoria(Scanner sc, Categoria tipo) {
         if (produtos.stream().anyMatch(produto->produto.getTipo().equals(tipo))){
             produtos.stream().filter(produto->produto.getTipo().equals(tipo)).forEach(System.out::println);
-            System.out.println("Existem "+ produtos.stream().filter(produto->produto.getTipo().equals(tipo)).count()+ "Produtos do tipo "+ tipo);
+            System.out.println("Existem "+ produtos.stream().filter(produto->produto.getTipo().equals(tipo)).count()+ " Produtos do tipo "+ tipo);
         }else{
-            System.out.println("Não há nenhum produto do tipo" + tipo);
+            System.out.println("Não há nenhum produto do tipo " + tipo);
+
+
         }
+        consultarEstoqueCategoria(sc);
     }
-
-
 
     public void acessarMenuGerenciadorEstoque(Scanner sc){
         System.out.println("*************       Gerenciador de estoque      ***********************");
@@ -282,7 +281,7 @@ public class Livraria {
         System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
         String opcaoMenu=sc.next();
         if(opcaoMenu.equals("1")){
-            consultarProduto(sc);
+            removerProduto(sc);
 
         }else{
             acessarMenuGerenciadorEstoque(sc);
@@ -332,7 +331,7 @@ public class Livraria {
 
         AlbumMusica album=new AlbumMusica(nome,preco,genero,banda,selo);
         produtos.add(album);
-        System.out.println(produtos);
+        System.out.println("Produto adicionado com sucesso!");
         acessarMenuGerenciadorEstoque(sc);
 
     }
@@ -349,7 +348,7 @@ public class Livraria {
 
         Brinquedo brinquedo=new Brinquedo(nome,preco,tipoBrinquedo);
         produtos.add(brinquedo);
-        System.out.println(produtos);
+        System.out.println("Produto adicionado com sucesso!");
         acessarMenuGerenciadorEstoque(sc);
 
     }
@@ -367,15 +366,15 @@ public class Livraria {
         System.out.println("Digite o nome do Diretor do Filme:");
         String diretor=sc.next();
 
-        System.out.println("Digite o nome do Produto do Filme:");
+        System.out.println("Digite o nome do Produtor do Filme:");
         String produtor=sc.next();
 
-        System.out.println("Digite o nome do Filme:");
+        System.out.println("Digite o nome do Estudio:");
         String estudio=sc.next();
 
         Filme filme=new Filme(nome,preco,diretor,genero,estudio,produtor);
         produtos.add(filme);
-        System.out.println(produtos);
+        System.out.println("Produto adicionado com sucesso!");
         acessarMenuGerenciadorEstoque(sc);
     }
     public void adicionarJogo(Scanner sc){
@@ -398,7 +397,7 @@ public class Livraria {
 
         Jogo jogo=new Jogo(nome,preco,distribuidora,genero,estudio);
         produtos.add(jogo);
-        System.out.println(produtos);
+        System.out.println("Produto adicionado com sucesso!");
         acessarMenuGerenciadorEstoque(sc);
 
     }
@@ -422,7 +421,7 @@ public class Livraria {
 
         Livro livro=new Livro(nome,preco,genero,escritor,editora);
         produtos.add(livro);
-        System.out.println(produtos);
+        System.out.println("Produto adicionado com sucesso!");
         acessarMenuGerenciadorEstoque(sc);
 
 
@@ -490,30 +489,35 @@ public class Livraria {
         String idAlteraProduto=sc.next();
         int id=Integer.parseInt(idAlteraProduto);
         if (produtos.stream().anyMatch(produto -> produto.getId()==id && produto.getTipo().equals(Categoria.LIVRO))){
-            Livro livro=(Livro) produtos.stream().filter(produto->produto.getId()==id);
-            System.out.println("Digite o nome do Livro:");
-            String nome=sc.next();
-            livro.setNome(nome);
+            Optional<Produto> matchLivro=produtos.stream().filter(produto->produto.getId()==id).findFirst();
+            if(matchLivro.isPresent()){
+                Livro livro=(Livro) matchLivro.get();
+                System.out.println("Digite o nome do Livro:");
+                String nome=sc.next();
+                livro.setNome(nome);
 
-            System.out.println("Digite o preco do Livro:");
-            String precoString=sc.next();
-            Double preco=Double.valueOf(precoString);
-            livro.setPreco(preco);
+                System.out.println("Digite o preco do Livro:");
+                String precoString=sc.next();
+                Double preco=Double.valueOf(precoString);
+                livro.setPreco(preco);
 
-            System.out.println("Digite o nome do escritor:");
-            String escritor=sc.next();
-            livro.setEscritor(escritor);
+                System.out.println("Digite o nome do escritor:");
+                String escritor=sc.next();
+                livro.setEscritor(escritor);
 
-            System.out.println("Digite o nome do genero:");
-            String genero=sc.next();
-            livro.addGeneros(genero);
+                System.out.println("Digite o nome do genero:");
+                String genero=sc.next();
+                livro.addGeneros(genero);
 
-            System.out.println("Digite o nome da editora:");
-            String editora=sc.next();
-            livro.setEditora(editora);
+                System.out.println("Digite o nome da editora:");
+                String editora=sc.next();
+                livro.setEditora(editora);
 
-            System.out.println("Produto alterado com sucesso!");
-            System.out.println(livro);
+                System.out.println("Produto alterado com sucesso!");
+                System.out.println(livro);
+
+            }
+
             acessarMenuGerenciadorEstoque(sc);
 
         }
@@ -533,33 +537,36 @@ public class Livraria {
         String idAlteraProduto=sc.next();
         int id=Integer.parseInt(idAlteraProduto);
         if (produtos.stream().anyMatch(produto -> produto.getId()==id && produto.getTipo().equals(Categoria.JOGO))){
-            Jogo jogo=(Jogo) produtos.stream().filter(produto->produto.getId()==id);
-            System.out.println("Digite o nome do Jogo:");
-            String nome=sc.next();
-            jogo.setNome(nome);
+            Optional<Produto> matchJogo=produtos.stream().filter(produto->produto.getId()==id).findFirst();
+            if (matchJogo.isPresent()){
+                Jogo jogo=(Jogo) matchJogo.get();
+                System.out.println("Digite o nome do Jogo:");
+                String nome=sc.next();
+                jogo.setNome(nome);
 
-            System.out.println("Digite o preco do Jogo:");
-            String precoString=sc.next();
-            Double preco=Double.valueOf(precoString);
-            jogo.setPreco(preco);
+                System.out.println("Digite o preco do Jogo:");
+                String precoString=sc.next();
+                Double preco=Double.valueOf(precoString);
+                jogo.setPreco(preco);
 
-            System.out.println("Digite o nome do Estudio:");
-            String estudio=sc.next();
-            jogo.setEstudio(estudio);
+                System.out.println("Digite o nome do Estudio:");
+                String estudio=sc.next();
+                jogo.setEstudio(estudio);
 
-            System.out.println("Digite o nome do genero:");
-            String genero=sc.next();
-            jogo.addGeneros(genero);
+                System.out.println("Digite o nome do genero:");
+                String genero=sc.next();
+                jogo.addGeneros(genero);
 
-            System.out.println("Digite o nome da distribuidora:");
-            String distribuidora=sc.next();
-            jogo.setDistribuidora(distribuidora);
+                System.out.println("Digite o nome da distribuidora:");
+                String distribuidora=sc.next();
+                jogo.setDistribuidora(distribuidora);
 
-            System.out.println("Produto alterado com sucesso!");
-            System.out.println(jogo);
+                System.out.println("Produto alterado com sucesso!");
+                System.out.println(jogo);
+            }
+
             acessarMenuGerenciadorEstoque(sc);
-
-        }
+       }
         System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
         String opcaoMenu=sc.next();
         if(opcaoMenu.equals("1")){
@@ -576,32 +583,41 @@ public class Livraria {
         String idAlteraProduto=sc.next();
         int id=Integer.parseInt(idAlteraProduto);
         if (produtos.stream().anyMatch(produto -> produto.getId()==id&&produto.getTipo().equals(Categoria.FILME))){
-            Filme filme=(Filme) produtos.stream().filter(produto->produto.getId()==id);
-            System.out.println("Digite o nome do Filme:");
-            String nome=sc.next();
-            filme.setNome(nome);
+            Optional<Produto> matchFilme=produtos.stream().filter(produto->produto.getId()==id).findFirst();
+            if (matchFilme.isPresent()){
+                Filme filme=(Filme) matchFilme.get();
+                System.out.println("Digite o nome do Filme:");
+                String nome=sc.next();
+                filme.setNome(nome);
 
-            System.out.println("Digite o preco do Filme:");
-            String precoString=sc.next();
-            Double preco=Double.valueOf(precoString);
-            filme.setPreco(preco);
+                System.out.println("Digite o preco do Filme:");
+                String precoString=sc.next();
+                Double preco=Double.valueOf(precoString);
+                filme.setPreco(preco);
 
-            System.out.println("Digite o nome do genero:");
-            String genero=sc.next();
-            filme.addGeneros(genero);
+                System.out.println("Digite o nome do genero:");
+                String genero=sc.next();
+                filme.addGeneros(genero);
 
-            System.out.println("Digite o nome do Produtor:");
-            String produtor=sc.next();
-            filme.addProdutores(produtor);
+                System.out.println("Digite o nome do Produtor:");
+                String produtor=sc.next();
+                filme.addProdutores(produtor);
 
-            System.out.println("Digite o nome do Selo:");
-            String diretor=sc.next();
-            filme.addDiretores(diretor);
+                System.out.println("Digite o nome do Diretor:");
+                String diretor=sc.next();
+                filme.addDiretores(diretor);
 
-            System.out.println("Produto alterado com sucesso!");
-            System.out.println(filme);
+                System.out.println("Digite o nome do estudio do Filme:");
+                String estudio=sc.next();
+                filme.setEstudio(estudio);
+
+
+                System.out.println("Produto alterado com sucesso!");
+                System.out.println(filme);
+
+            }
+
             acessarMenuGerenciadorEstoque(sc);
-
         }
         System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de gerenciamento de estoque");
         String opcaoMenu=sc.next();
@@ -619,23 +635,27 @@ public class Livraria {
         String idAlteraProduto=sc.next();
         int id=Integer.parseInt(idAlteraProduto);
         if (produtos.stream().anyMatch(produto -> produto.getId()==id&& produto.getTipo().equals(Categoria.BRINQUEDO))){
-            Brinquedo brinquedo=(Brinquedo) produtos.stream().filter(produto->produto.getId()==id);
-            System.out.println("Digite o nome do Brinquedo:");
-            String nome=sc.next();
-            brinquedo.setNome(nome);
+            Optional<Produto> matchBrinquedo=produtos.stream().filter(produto->produto.getId()==id).findFirst();
+            if(matchBrinquedo.isPresent()){
+                Brinquedo brinquedo= (Brinquedo) matchBrinquedo.get();
+                System.out.println("Digite o nome do Brinquedo:");
+                String nome=sc.next();
+                brinquedo.setNome(nome);
 
-            System.out.println("Digite o preco do Brinquedo:");
-            String precoString=sc.next();
-            Double preco=Double.valueOf(precoString);
-            brinquedo.setPreco(preco);
+                System.out.println("Digite o preco do Brinquedo:");
+                String precoString=sc.next();
+                Double preco=Double.valueOf(precoString);
+                brinquedo.setPreco(preco);
 
-            System.out.println("Digite o Tipo do Brinquedo:");
-            String tipoBrinquedo=sc.next();
-            brinquedo.setTipoBrinquedo(tipoBrinquedo);
+                System.out.println("Digite o Tipo do Brinquedo:");
+                String tipoBrinquedo=sc.next();
+                brinquedo.setTipoBrinquedo(tipoBrinquedo);
 
+                System.out.println("Produto alterado com sucesso!");
+                System.out.println(brinquedo);
 
-            System.out.println("Produto alterado com sucesso!");
-            System.out.println(brinquedo);
+            }
+
             acessarMenuGerenciadorEstoque(sc);
 
         }
@@ -656,31 +676,35 @@ public class Livraria {
         System.out.println("Digite o id do produto a ser alterado:");
         String idAlteraProduto=sc.next();
         int id=Integer.parseInt(idAlteraProduto);
-        if (produtos.stream().anyMatch(produto -> produto.getId()==id)){
-            AlbumMusica album=(AlbumMusica) produtos.stream().filter(produto->produto.getId()==id&& produto.getTipo().equals(Categoria.ALBUM));
-            System.out.println("Digite o nome do Albúm:");
-            String nome=sc.next();
-            album.setNome(nome);
+        if (produtos.stream().anyMatch(produto -> produto.getId()==id && produto.getTipo().equals(Categoria.ALBUM))){
+            Optional<Produto>  matchAlbum = produtos.stream().filter(produto->produto.getId()==id).findFirst();
+            if (matchAlbum.isPresent()){
+                AlbumMusica album=(AlbumMusica) matchAlbum.get();
+                System.out.println("Digite o nome do Albúm:");
+                String nome=sc.next();
+                album.setNome(nome);
 
-            System.out.println("Digite o preco do Albúm:");
-            String precoString=sc.next();
-            Double preco=Double.valueOf(precoString);
-            album.setPreco(preco);
+                System.out.println("Digite o preco do Albúm:");
+                String precoString=sc.next();
+                Double preco=Double.valueOf(precoString);
+                album.setPreco(preco);
 
-            System.out.println("Digite o nome do genero:");
-            String genero=sc.next();
-            album.addGeneros(genero);
+                System.out.println("Digite o nome do genero:");
+                String genero=sc.next();
+                album.addGeneros(genero);
 
-            System.out.println("Digite o nome da Banda:");
-            String banda=sc.next();
-            album.addMusicos(banda);
+                System.out.println("Digite o nome da Banda:");
+                String banda=sc.next();
+                album.addMusicos(banda);
 
-            System.out.println("Digite o nome do Selo:");
-            String selo=sc.next();
-            album.addSelos(selo);
+                System.out.println("Digite o nome do Selo:");
+                String selo=sc.next();
+                album.addSelos(selo);
 
-            System.out.println("Produto alterado com sucesso!");
-            System.out.println(album);
+                System.out.println("Produto alterado com sucesso!");
+                System.out.println(album);
+            }
+
             acessarMenuGerenciadorEstoque(sc);
 
         }
@@ -692,7 +716,6 @@ public class Livraria {
         }else{
             acessarMenuGerenciadorEstoque(sc);
         }
-
 
     }
 

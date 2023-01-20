@@ -22,7 +22,10 @@ public class Filme extends Produto{
     }
 
     public void addDiretores(String diretor) {
-        this.diretores.add(diretor);
+        if(!this.diretores.contains(diretor)){
+            this.diretores.add(diretor);
+        }
+
     }
 
     public List<String> getGeneros() {
@@ -30,7 +33,11 @@ public class Filme extends Produto{
     }
 
     public void addGeneros(String genero) {
-        this.generos.add(genero);
+        if(!this.generos.contains(genero)){
+            this.generos.add(genero);
+
+        }
+
     }
 
     public void removeGeneros(String genero){
@@ -50,7 +57,10 @@ public class Filme extends Produto{
     }
 
     public void addProdutores(String produtor) {
-        this.produtores.add(produtor);
+        if (!this.produtores.contains(produtor)){
+            this.produtores.add(produtor);
+        }
+
     }
 
     @Override

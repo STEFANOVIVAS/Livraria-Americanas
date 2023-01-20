@@ -24,8 +24,12 @@ public class AlbumMusica extends Produto{
     }
 
     public void addGeneros(String genero) {
+        if(!this.generos.contains(genero)){
+            this.generos.add(genero);
 
-        this.generos.add(genero)  ;
+        }
+
+
     }
 
     public void removeGeneros(String genero){
@@ -37,7 +41,10 @@ public class AlbumMusica extends Produto{
     }
 
     public void addMusicos(String musico) {
-        this.musicos.add(musico);
+        if(!this.musicos.contains(musico)){
+            this.musicos.add(musico);
+        }
+
     }
 
     public List<String> getSelos() {
@@ -45,7 +52,10 @@ public class AlbumMusica extends Produto{
     }
 
     public void addSelos(String selo) {
-        this.selos.add(selo);
+        if (!this.selos.contains(selo)){
+            this.selos.add(selo);
+        }
+
     }
 
     @Override

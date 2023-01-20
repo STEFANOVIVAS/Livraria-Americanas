@@ -20,7 +20,12 @@ public class Livro extends Produto{
     }
 
     public void addGeneros(String genero) {
-        this.generos.add(genero);
+        if(!this.generos.contains(genero)){
+            this.generos.add(genero);
+
+        }
+
+
     }
 
     public void removeGeneros(String genero){
