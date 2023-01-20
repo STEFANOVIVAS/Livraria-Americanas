@@ -15,10 +15,14 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Livraria {
-    private List<Produto> produtos= new ArrayList<>();
+    List<Produto> produtos= new ArrayList<>();
+    List<Produto> carrinho= new ArrayList<>();
+    Double caixa=1000.0;
+
+
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in).useDelimiter("\\n");
-       /* AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
+        /*AlbumMusica album = new AlbumMusica("Secos e molhados", 35.5, "MPB", "Secos e molhados", "EMI");
         AlbumMusica album2 = new AlbumMusica("revolta dos dandis", 40.5, "Rock", "Engenheiros do Hawai", "EMI");
         Livro livro = new Livro("Habitos Atomicos", 44.5, "Produtividade", "Carlos tiher", "Cia das letras");
         Brinquedo brinquedo = new Brinquedo("Pula Pula", 40.5, "Bonecos");
@@ -36,13 +40,24 @@ public class Livraria {
         prods.add(album);
         prods.add(livro);
         prods.add(filme);
-        prods.add(livro);
+
         int id=1;
-        prods.stream().filter((produto)->produto.getId()==id).forEach(System.out::println);*/
+        Optional<Produto> matchProduct =  prods.stream().filter((produto)->produto.getId()==id).findFirst();
+        if(matchProduct.isPresent()){
+            Produto produto=matchProduct.get();
+            System.out.println(produto);
+        }
+        List<Integer> numeros =new ArrayList<>();
+        numeros.add(1);
+        numeros.add(3);
+        List<Integer> compras=prods.stream().map(Produto::getId).toList();
+        System.out.println(compras);
 
-
-
-
+        List<Produto> results = prods.stream().filter(produto->numeros.stream().collect(Collectors.toList()).contains(produto.getId())).collect(Collectors.toList());
+        System.out.println(prods);
+        prods.removeIf(produto->numeros.stream().collect(Collectors.toList()).contains(produto.getId()));
+        System.out.println(prods);
+*/
 
         Livraria livraria=new Livraria();
         livraria.menuInciar(sc);
@@ -72,9 +87,8 @@ public class Livraria {
             case ("1") -> acessarMenuGerenciadorEstoque(sc);
             case ("2") -> consultarEstoqueCategoria(sc);
             case ("3") -> consultarEstoqueGeral(sc);
-
-            /*case ("5") -> realizarCompra();*/
-            default ->throw new IllegalStateException("Erro inesperado" + numeroMenuInicial);
+            case ("4") -> acessarMenuCompra(sc);
+            default -> menuInciar(sc);
 
 
 
@@ -82,6 +96,97 @@ public class Livraria {
 
 
 
+
+    }
+
+    private void acessarMenuCompra(Scanner sc) {
+        //listar produtos(posso chamar função consultar estoque geral
+        // permitir que o usuário escolha os produtos para inserir no carrinho de compras
+        // calcular o valor da compra e mostrar os produtos
+        // remover produitos do estoque
+        // acrescentar valor ao caixa
+
+
+        produtos.forEach(System.out::println);
+
+
+        System.out.println("Sua lista atual tem "+ carrinho.size() + " itens");
+        System.out.println("Carrinho de compras: ");
+        carrinho.forEach(System.out::println);
+        double valorTotal= carrinho.stream().mapToDouble(Produto::getPreco).sum();
+        System.out.println("Valor total da compra: " + valorTotal);
+        System.out.println("Digite 1 para adicionar os itens na sua sacola, 2 para remover, 3 para encerar a compra ou 4 voltar ao menu inicial.");
+        String opcaoMenuCompra=sc.next();
+        switch (opcaoMenuCompra) {
+            case ("1") -> incluirProdutosCarrinho(sc);
+            case ("2") -> removerProdutosCarrinho(sc);
+            /*case ("3") -> encerrarCompra();*/
+            default -> menuInciar(sc);
+
+        }
+
+
+    }
+
+    private void encerrarCompra(Scanner sc) {
+        //remover produtos do estoque
+        if(carrinho.size()==0){
+            System.out.println("Seu carrinho esta vazio, portanto, não será possível encerrar a compra");
+            System.out.println("Retorne para o menu de compras.");
+            acessarMenuCompra(sc);
+        }
+        List<Integer> idCompras=carrinho.stream().map(Produto::getId).toList();
+        produtos.removeIf(produto->idCompras.stream().toList().contains(produto.getId()));
+        double valorTotal= carrinho.stream().mapToDouble(Produto::getPreco).sum();
+        this.caixa+=valorTotal;
+        System.out.println("Caixa total no valor de " + "R$ " + this.caixa);
+        carrinho.clear();
+        menuInciar(sc);
+
+    }
+
+    private void removerProdutosCarrinho(Scanner sc) {
+        System.out.println("Escolha o item que irá ser removido do seu carrinho de compras através do número do id");
+        if (carrinho.isEmpty()){
+            System.out.println("Seu carrinho esta vazio, portanto não é possível excluir produtos!");
+            acessarMenuCompra(sc);
+
+        }
+        String produtoId=sc.next();
+        int id=Integer.parseInt(produtoId);
+        if (carrinho.stream().anyMatch(produto -> produto.getId()==id)){
+            carrinho.removeIf(produto-> produto.getId()==id);
+            System.out.println("Produto removido com sucesso!");
+            acessarMenuGerenciadorEstoque(sc);
+
+        }
+        System.out.println("Id não localizado, tecle 1 para tentar novamente ou tecle 2 para retornar ao menu de Compras");
+        String opcaoMenu=sc.next();
+        if(opcaoMenu.equals("1")){
+            removerProdutosCarrinho(sc);
+
+        }else{
+            acessarMenuCompra(sc);
+        }
+    }
+
+    private void incluirProdutosCarrinho(Scanner sc) {
+        System.out.println("Escolha os items que irão compor seu carrinho de compras através do número do id");
+        String idProduto=sc.next();
+        int id= Integer.parseInt(idProduto);
+        if (carrinho.stream().anyMatch(produto -> produto.getId()==id)){
+            Optional<Produto> matchProduct = carrinho.stream().filter(produto->produto.getId()==id).findFirst();
+            if (matchProduct.isPresent()){
+                Produto produto=matchProduct.get();
+                carrinho.add(produto);
+                System.out.println("Item adicionado ao carrinho");
+
+            }
+        }else{
+            System.out.println("Produto não encontrado no estoque. Tente novamente!");
+
+        }
+        acessarMenuCompra(sc);
 
     }
 
@@ -168,8 +273,8 @@ public class Livraria {
         String produtoId=sc.next();
         int id=Integer.parseInt(produtoId);
         if (produtos.stream().anyMatch(produto -> produto.getId()==id)){
-            Produto matchProduct = (Produto) produtos.stream().filter(produto->produto.getId()==id);
-            produtos.remove(matchProduct);
+            produtos.removeIf(produto->produto.getId()==id);
+
             System.out.println("Produto removido com sucesso!");
             acessarMenuGerenciadorEstoque(sc);
 
